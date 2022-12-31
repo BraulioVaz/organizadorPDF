@@ -1,4 +1,4 @@
-import com.brauliovaz.modelos.Entidad;
+package com.brauliovaz.modelos.entidades;
 
 public class CarpetaLibro implements Entidad {
 	public int IdCarpeta;

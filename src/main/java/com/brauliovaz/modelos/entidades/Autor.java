@@ -1,4 +1,4 @@
-package com.brauliovaz.modelos;
+package com.brauliovaz.modelos.entidades;
 
 public class Autor implements Entidad {
 	public int IdAutor;

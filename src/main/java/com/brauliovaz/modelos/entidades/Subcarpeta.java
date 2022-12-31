@@ -1,4 +1,4 @@
-import com.brauliovaz.modelos.Entidad;
+package com.brauliovaz.modelos.entidades;
 
 public class Subcarpeta implements Entidad {
 	public int IdSubcarpeta;
