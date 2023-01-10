@@ -17,7 +17,7 @@ public abstract class ManejadorBase<T extends Entidad>{
 	}
 	
 	public List<T> obtenerTodos(){
-		String sql = crearConsulta(null);
+		String sql = FormateadorSQL.crearSelect(tabla, null);
 		ResultSet registros = null;
 				
 		try {
@@ -29,33 +29,6 @@ public abstract class ManejadorBase<T extends Entidad>{
 		}
 		
 		return Collections.emptyList();
-	}
-	
-	private String crearConsulta(HashMap<String, Object> condiciones) {
-		String sql = "SELECT * FROM " + tabla + " ";
-		
-		if(condiciones != null) {
-			sql += "WHERE ";
-			
-			for(String llave : condiciones.keySet()) {
-				sql += llave + " = " + valorEnSQL(condiciones.get(llave)) + ","; 
-			}
-			
-			sql = sql.substring(0, sql.length() - 1);
-		}
-		
-		return sql + ";";
-	}
-	
-	private String valorEnSQL(Object dato) {
-		switch(dato.getClass().getSimpleName()) {
-			case "String":
-				return "'" + dato + "'";
-			case "int":
-				return dato.toString();
-		}
-		
-		return dato.toString();
 	}
 	
 	private List<T> convertirRegistrosEnEntidades(ResultSet rs) throws SQLException{
@@ -96,7 +69,7 @@ public abstract class ManejadorBase<T extends Entidad>{
 	}
 	
 	public List<T> select(HashMap<String, Object> condiciones){
-		String sql = crearConsulta(condiciones);
+		String sql = FormateadorSQL.crearSelect(tabla, condiciones);
 		ResultSet registros = null;
 		
 		try {
@@ -108,5 +81,9 @@ public abstract class ManejadorBase<T extends Entidad>{
 		}
 		
 		return Collections.emptyList();
+	}
+	
+	public boolean insert(T entidad) {
+		return false;
 	}
 }
