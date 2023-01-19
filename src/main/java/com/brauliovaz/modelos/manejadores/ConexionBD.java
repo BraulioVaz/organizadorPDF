@@ -20,9 +20,13 @@ class ConexionBD {
 	public static boolean ejecutar(String sql) throws SQLException{
 		Connection conexion = conectar();
 		Statement sentencia = null;
+		boolean resultado = false;
 		
 		sentencia = conexion.createStatement();
-		return sentencia.execute(sql);
+		resultado = sentencia.execute(sql);
+		conexion.close();
+		
+		return resultado;
 	}
 	
 	public static ResultSet ejecutarConsulta(String sql) throws SQLException{

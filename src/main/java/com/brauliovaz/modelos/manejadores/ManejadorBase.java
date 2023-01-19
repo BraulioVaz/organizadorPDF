@@ -19,16 +19,18 @@ public abstract class ManejadorBase<T extends Entidad>{
 	public List<T> obtenerTodos(){
 		String sql = FormateadorSQL.crearSelect(tabla, null);
 		ResultSet registros = null;
-				
+		List<T> resultado = Collections.emptyList();
+		
 		try {
 			registros = ConexionBD.ejecutarConsulta(sql);
-			return convertirRegistrosEnEntidades(registros);
+			resultado = convertirRegistrosEnEntidades(registros);
+			registros.close();
 		}
 		catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		
-		return Collections.emptyList();
+		return resultado;
 	}
 	
 	private List<T> convertirRegistrosEnEntidades(ResultSet rs) throws SQLException{
@@ -68,22 +70,62 @@ public abstract class ManejadorBase<T extends Entidad>{
 		}
 	}
 	
-	public List<T> select(HashMap<String, Object> condiciones){
+	public List<T> select(List<Campo> condiciones){
 		String sql = FormateadorSQL.crearSelect(tabla, condiciones);
 		ResultSet registros = null;
+		List<T> resultado = Collections.emptyList();
 		
 		try {
 			registros = ConexionBD.ejecutarConsulta(sql);
-			return convertirRegistrosEnEntidades(registros);
+			resultado = convertirRegistrosEnEntidades(registros);
+			registros.close();
 		}
 		catch(SQLException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Error en consulta: " + e.getMessage());
 		}
 		
-		return Collections.emptyList();
+		return resultado;
 	}
 	
 	public boolean insert(T entidad) {
-		return false;
+		String sql = FormateadorSQL.crearInsert(tabla, entidad);
+		boolean operacionExitosa = false;
+		
+		try {
+			operacionExitosa = ConexionBD.ejecutar(sql);
+		}
+		catch(SQLException e) {
+			System.out.println("Error en insercion : " + e.getMessage());
+		}
+		
+		return operacionExitosa;
+	}
+	
+	public boolean update(T entidad) {
+		String sql = FormateadorSQL.crearUpdate(tabla, entidad);
+		boolean operacionExitosa = false;
+		
+		try {
+			operacionExitosa = ConexionBD.ejecutar(sql);
+		}
+		catch(SQLException e) {
+			System.out.println("Error en actualizacion : " + e.getMessage());
+		}
+		
+		return operacionExitosa;
+	}
+	
+	public boolean delete(T entidad) {
+		String sql = FormateadorSQL.crearDelete(tabla, entidad);
+		boolean operacionExitosa = false;
+		
+		try {
+			operacionExitosa = ConexionBD.ejecutar(sql);
+		}
+		catch(SQLException e) {
+			System.out.println("Error en eliminacion : " + e.getMessage());
+		}
+		
+		return operacionExitosa;
 	}
 }
